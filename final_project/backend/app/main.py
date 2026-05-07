@@ -16,15 +16,21 @@ from .auth import hash_password, verify_password
 from .content import EXERCISES, SESSION_TEMPLATES, VOICE_TIPS
 from .database import get_db, init_db
 
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
+
 app = FastAPI(title="FitFusion Studio API")
-app.add_middleware(SessionMiddleware, secret_key="fitfusion-react-studio-secret", same_site="lax")
+
+app.add_middleware(
+    SessionMiddleware,
+    secret_key="fitfusion-react-studio-secret",
+    same_site="none",
+    https_only=True,
+)
+
 app.add_middleware(
     CORSMiddleware,
-   allow_origins=[
-    "http://127.0.0.1:5173",
-    "http://localhost:5173",
-    "https://fit-fusion-ai-hazel.vercel.app/login"
-],
+    allow_origin_regex="https://.*\\.vercel\\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
