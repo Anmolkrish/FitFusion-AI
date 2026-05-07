@@ -1,27 +1,41 @@
+const BASE_URL = "https://fitfusion-ai.onrender.com";
+
 const API = {
   async request(path, options = {}) {
-    const response = await fetch(path, {
+    const response = await fetch(`${BASE_URL}${path}`, {
       credentials: 'include',
       ...options,
     });
+
     if (!response.ok) {
       let detail = 'Request failed';
+
       try {
         const payload = await response.json();
         detail = payload.detail || detail;
       } catch (_) {}
+
       throw new Error(detail);
     }
+
     const contentType = response.headers.get('content-type') || '';
-    if (contentType.includes('application/json')) return response.json();
+
+    if (contentType.includes('application/json')) {
+      return response.json();
+    }
+
     return response.text();
   },
 
   formData(data) {
     const body = new URLSearchParams();
+
     Object.entries(data).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) body.append(key, value);
+      if (value !== undefined && value !== null) {
+        body.append(key, value);
+      }
     });
+
     return body;
   },
 
@@ -34,11 +48,31 @@ const API = {
   templates() { return this.request('/api/templates'); },
   voiceTips() { return this.request('/api/voice-tips'); },
   history() { return this.request('/api/history'); },
-  saveSession(payload) { return this.request('/api/session/save', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); },
-  createManual(data) { return this.request('/api/history/manual', { method: 'POST', body: this.formData(data) }); },
-  deleteSession(id) { return this.request(`/api/history/${id}`, { method: 'DELETE' }); },
+  saveSession(payload) {
+    return this.request('/api/session/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  },
+  createManual(data) {
+    return this.request('/api/history/manual', {
+      method: 'POST',
+      body: this.formData(data)
+    });
+  },
+  deleteSession(id) {
+    return this.request(`/api/history/${id}`, {
+      method: 'DELETE'
+    });
+  },
   profile() { return this.request('/api/profile'); },
-  updateProfile(data) { return this.request('/api/profile', { method: 'POST', body: this.formData(data) }); },
+  updateProfile(data) {
+    return this.request('/api/profile', {
+      method: 'POST',
+      body: this.formData(data)
+    });
+  },
 };
 
 export default API;
