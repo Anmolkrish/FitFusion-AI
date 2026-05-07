@@ -18,9 +18,6 @@ from .database import get_db, init_db
 
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
-
-app = FastAPI(title="FitFusion Studio API")
-
 app.add_middleware(
     SessionMiddleware,
     secret_key="fitfusion-react-studio-secret",
@@ -30,7 +27,10 @@ app.add_middleware(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://fit-fusion-ai-chi.vercel.app"
+    ],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
