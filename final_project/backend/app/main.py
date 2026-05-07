@@ -1,4 +1,5 @@
 from __future__ import annotations
+from fastapi.middleware.cors import CORSMiddleware
 
 import csv
 import io
@@ -19,7 +20,11 @@ app = FastAPI(title="FitFusion Studio API")
 app.add_middleware(SessionMiddleware, secret_key="fitfusion-react-studio-secret", same_site="lax")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5173", "http://localhost:5173"],
+   allow_origins=[
+    "http://127.0.0.1:5173",
+    "http://localhost:5173",
+    "https://fit-fusion-ai-hazel.vercel.app/login"
+],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
