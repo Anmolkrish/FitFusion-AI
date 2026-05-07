@@ -3,7 +3,6 @@ const BASE_URL = "https://fitfusion-ai.onrender.com";
 const API = {
   async request(path, options = {}) {
     const response = await fetch(`${BASE_URL}${path}`, {
-      credentials: 'include',
       ...options,
     });
 
